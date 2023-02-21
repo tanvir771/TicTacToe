@@ -41,6 +41,7 @@ def get_placement(pos, width, height):
   return (box_x, box_y)
 
 
+
 def draw_cross(placement):
   print(((placement[0]-1)*width/3, (placement[1]-1)*height/3), (placement[1]*width/3, placement[0]*height/3))
   pygame.draw.line(screen, (255, 255, 255), ((placement[0]-1)*width/3, (placement[1]-1)*height/3), (placement[1]*width/3, placement[0]*height/3))
