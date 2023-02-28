@@ -24,6 +24,7 @@ def get_placement(pos, width, height):
   box_y = 0
 
   x = pos[0]
+  y = pos[1]
   if x < width*1/3:
     box_x = 1
   elif x < width*2/3:
@@ -31,9 +32,9 @@ def get_placement(pos, width, height):
   else:
     box_x = 3
 
-  if x < height*1/3:
+  if y < height*1/3:
     box_y = 1
-  elif x < height*2/3:
+  elif y <= height*2/3:
     box_y = 2
   else:
     box_y = 3
@@ -43,8 +44,8 @@ def get_placement(pos, width, height):
 
 
 def draw_cross(placement):
-  print(((placement[0]-1)*width/3, (placement[1]-1)*height/3), (placement[1]*width/3, placement[0]*height/3))
-  pygame.draw.line(screen, (255, 255, 255), ((placement[0]-1)*width/3, (placement[1]-1)*height/3), (placement[1]*width/3, placement[0]*height/3))
+  pygame.draw.line(screen, (255, 255, 255), ((placement[0]-1)*width/3, (placement[1]-1)*height/3), (placement[0]*height/3, placement[1]*width/3))
+  pygame.draw.line(screen, (255, 255, 255), ((placement[0])*width/3, (placement[1]-1)*height/3), ((placement[0]-1)*height/3, (placement[1])*width/3))
 
 
 draw_grid(width, height)
