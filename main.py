@@ -44,8 +44,8 @@ def get_placement(pos, width, height):
 
 
 def draw_cross(placement):
-  pygame.draw.line(screen, (255, 255, 255), ((placement[0]-1)*width/3, (placement[1]-1)*height/3), (placement[0]*height/3, placement[1]*width/3))
-  pygame.draw.line(screen, (255, 255, 255), ((placement[0])*width/3, (placement[1]-1)*height/3), ((placement[0]-1)*height/3, (placement[1])*width/3))
+  pygame.draw.line(screen, (255, 255, 255), ((placement[0]-1)*width/3, (placement[1]-1)*height/3), (placement[0]*height/3, placement[1]*width/3), width=10)
+  pygame.draw.line(screen, (255, 255, 255), ((placement[0])*width/3, (placement[1]-1)*height/3), ((placement[0]-1)*height/3, (placement[1])*width/3), width=10)
 
 def draw_circle(placement):
   pygame.draw.circle(screen, (255, 255, 255), (((placement[0]-1)*width/3 + (width/6)), ((placement[1]-1)*height/3) + (height/6)), width/6, width=10)
@@ -68,5 +68,5 @@ while running:
       # handle MOUSEBUTTONUP
       if ev.type == pygame.MOUSEBUTTONUP:
         pos = pygame.mouse.get_pos()
-        draw_circle(get_placement(tuple(pos), width, height))
+        draw_cross(get_placement(tuple(pos), width, height))
         pygame.display.update()
