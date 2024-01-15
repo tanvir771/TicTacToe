@@ -1,4 +1,11 @@
+# Driver File
+
 import pygame
+
+from Grid import Grid
+from Circle import Circle
+from Cross import Cross
+
 
 background_colour = (0, 0, 0)
 
@@ -8,65 +15,102 @@ screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption('TicTacToe')
 screen.fill(background_colour)
 
-def draw_grid(width, height):
-  # draws a grid with 3 vertical and 3 horizontal lines
-  pygame.draw.line(screen, (255, 255, 255), (width*1/3, 0), (width*1/3, 600))
-  pygame.draw.line(screen, (255, 255, 255), (width*2/3, 0), (width*2/3, 600))
-  pygame.draw.line(screen, (255, 255, 255), (width, 0), (width, 600))
+state = {}
 
-  pygame.draw.line(screen, (255, 255, 255), (0, height*1/3), (600, height*1/3))
-  pygame.draw.line(screen, (255, 255, 255), (0, height*2/3), (600, height*2/3))
-  pygame.draw.line(screen, (255, 255, 255), (0, height), (600, height))
+
+grid = Grid(screen, width, height)
+circle = Circle()
+cross = Cross()
+
+pygame.init()
+font = pygame.font.Font(None, 100)
+
+def labelWinner(winner):
+  # render text
+  if winner == 0:
+    winner = "O"
+  else:
+    winner = "X"
+
+  return "Winner is {}!".format(winner)
+
+
 
 def get_placement(pos, width, height):
   grid_numbers = {(200, 200): 1, (400, 200):2, (600, 200): 3}
-  box_x = 0
-  box_y = 0
+  row = 0
+  column = 0
 
   x = pos[0]
   y = pos[1]
+
+  print("x y", x, y)
+
   if x < width*1/3:
-    box_x = 1
+    column = 1
   elif x < width*2/3:
-    box_x = 2
+    column = 2
   else:
-    box_x = 3
+    column = 3
 
   if y < height*1/3:
-    box_y = 1
+    row = 1
   elif y <= height*2/3:
-    box_y = 2
+    row = 2
   else:
-    box_y = 3
+    row = 3
 
-  return (box_x, box_y)
+  return (row, column)
 
 
-
-def draw_cross(placement):
-  pygame.draw.line(screen, (255, 255, 255), ((placement[0]-1)*width/3, (placement[1]-1)*height/3), (placement[0]*height/3, placement[1]*width/3), width=10)
-  pygame.draw.line(screen, (255, 255, 255), ((placement[0])*width/3, (placement[1]-1)*height/3), ((placement[0]-1)*height/3, (placement[1])*width/3), width=10)
-
-def draw_circle(placement):
-  pygame.draw.circle(screen, (255, 255, 255), (((placement[0]-1)*width/3 + (width/6)), ((placement[1]-1)*height/3) + (height/6)), width/6, width=10)
-  # last width is pygame.draw.circle's argument, width=0 by default, which gives filled in circle
-
-draw_grid(width, height)
+grid.drawGrid()
 pygame.display.flip()
 
 
 running = True
+flip = True
+
+playing = True
+
 while running:
-  # for event in pygame.event.get():
-    # get all events
-    event = pygame.event.get()
+  event = pygame.event.get()
+
+  for ev in event:
     # proceed events
-    for ev in event:
-      # handles game quit
-      if ev.type == pygame.QUIT:
-        running = False
-      # handle MOUSEBUTTONUP
+    # handles game quit
+    winner = -1
+    if ev.type == pygame.QUIT:
+      running = False
+    # handle MOUSEBUTTONUP
+    if playing == True:
       if ev.type == pygame.MOUSEBUTTONUP:
         pos = pygame.mouse.get_pos()
-        draw_cross(get_placement(tuple(pos), width, height))
+        (row, column) = get_placement(pos, width, height)
+        print(row, column)
+        if flip:
+          # we will let the player be 0
+          #  9 represents empty, 0 represents circle and 1 represents X
+          # start with circle, so 0 in third parameteer of updateGrid
+          grid.updateGrid(row-1, column-1, 0)
+          winner = grid.redrawGrid(circle, cross)
+          flip = False
+        else:
+          grid.updateGrid(row-1, column-1, 1)
+          winner = grid.redrawGrid(circle, cross)
+          flip = True
+
+        print("winner value ", winner)
+        if winner != -1:
+          text = labelWinner(winner)
+          label = font.render(text, True, (255, 255, 255))
+          labelRect = label.get_rect(center=(width // 2, height // 2))
+          screen.blit(label, labelRect)
+          playing = False
         pygame.display.update()
+
+      if playing == False:
+        pygame.display.flip()
+
+#make sure that scroll wheel does not trigger pygame to draw
+#we need a current state dictionary to store the state of the game, use that to draw cross/circles; if state already has
+#box stored, no more crosses/circles can be drawn on that box
