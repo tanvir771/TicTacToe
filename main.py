@@ -28,15 +28,18 @@ font = pygame.font.Font(None, 100)
 def labelWinner(winner):
   # render text
   if winner == 0:
-    winner = "O"
+    winner = "Winner is O!"
+  elif winner == 1:
+    winner = "Winner is X!"
   else:
-    winner = "X"
+    winner = "It's a draw!"
 
-  return "Winner is {}!".format(winner)
+  return winner
 
 
 
 def get_placement(pos, width, height):
+  # useless
   grid_numbers = {(200, 200): 1, (400, 200):2, (600, 200): 3}
   row = 0
   column = 0
@@ -44,7 +47,6 @@ def get_placement(pos, width, height):
   x = pos[0]
   y = pos[1]
 
-  print("x y", x, y)
 
   if x < width*1/3:
     column = 1
@@ -86,7 +88,6 @@ while running:
       if ev.type == pygame.MOUSEBUTTONUP:
         pos = pygame.mouse.get_pos()
         (row, column) = get_placement(pos, width, height)
-        print(row, column)
         if flip:
           # we will let the player be 0
           #  9 represents empty, 0 represents circle and 1 represents X
@@ -96,16 +97,17 @@ while running:
           flip = False
         else:
           grid.updateGrid(row-1, column-1, 1)
+          #grid.make_best_move(1)
           winner = grid.redrawGrid(circle, cross)
           flip = True
 
-        print("winner value ", winner)
         if winner != -1:
           text = labelWinner(winner)
           label = font.render(text, True, (255, 255, 255))
           labelRect = label.get_rect(center=(width // 2, height // 2))
           screen.blit(label, labelRect)
           playing = False
+
         pygame.display.update()
 
       if playing == False:
@@ -114,3 +116,5 @@ while running:
 #make sure that scroll wheel does not trigger pygame to draw
 #we need a current state dictionary to store the state of the game, use that to draw cross/circles; if state already has
 #box stored, no more crosses/circles can be drawn on that box
+
+#make sure to implement draw system and fix winner system

@@ -17,7 +17,8 @@ class Grid:
 
     def checkRowsWinner(self, grid):
         # Check rows for winner
-        for row in self.grid:
+        # takes a grid of its own
+        for row in grid:
             if len(set(row)) == 1 and row[0] != 9:
                 # 9 9 9 should not mean anyone won
                 return row[0]
@@ -27,7 +28,7 @@ class Grid:
         # Checks both diagonals for winners
         if len(set([self.grid[i][i] for i in range(len(self.grid))])) == 1 and self.grid[0][0] != 9:
             return self.grid[0][0]
-        if len(set([self.grid[i][len(self.grid) - i - 1] for i in range(len(self.grid))])) == 1 and self.grid[2][
+        if len(set([self.grid[i][len(self.grid) - i - 1] for i in range(len(self.grid))])) == 1 and self.grid[0][
             2] != 9:
             return self.grid[0][len(self.grid) - 1]
         return -1
@@ -45,8 +46,8 @@ class Grid:
     def updateGrid(self, row, column, x):
         # row and column for grid
         # x takes values, 9, 0 or 1; 9 represents empty, 0 represents circle and 1 represents X
-        if self.grid[column][row] == 9:
-            self.grid[column][row] = x
+        if self.grid[row][column] == 9:
+            self.grid[row][column] = x
 
     def drawGrid(self):
         # draws a grid with 3 vertical and 3 horizontal lines
@@ -72,3 +73,39 @@ class Grid:
 
         winner = self.check_winner()
         return winner
+
+    def make_best_move(self, player):
+        # player - 0 representing O and 1 representing x
+        bestScore = -9999
+        bestMove = (0, 0)
+        for rowIndex in range(len(self.grid)):
+            for columnIndex in range(len(self.grid[rowIndex])):
+                if self.grid[rowIndex][columnIndex] == 9:  # represents empty
+                    self.grid[rowIndex][columnIndex] = player
+                    score = self.minimax(player, self.grid)
+                    self.grid[rowIndex][columnIndex] = 9  # undo move
+                    if score > bestScore:
+                        bestScore = score
+                        bestMove = (rowIndex, columnIndex)
+        self.grid[bestMove[0]][bestMove[1]] = player
+
+    def minimax(self, maximizerPlayer, board):
+        winner = self.check_winner()
+        if winner == -1:
+            # draw
+            return 0
+        elif winner == 0 or winner == 1:
+            if winner == maximizerPlayer:
+                return 1
+            else:
+                return -1
+
+        scores = []
+        for rowIndex in range(len(self.grid)):
+            for columnIndex in range(len(self.grid[rowIndex])):
+                if board[rowIndex][columnIndex] == 9:  # represents empty
+                    self.grid[rowIndex][columnIndex] = maximizerPlayer
+                    scores.append(self.minimax(maximizerPlayer, board))
+                    self.grid[rowIndex][columnIndex] = 9  # undo move
+
+        return max(scores)
