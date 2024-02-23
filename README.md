@@ -17,11 +17,11 @@
             </ul>
         </li>
         <li><strong>Clone the Repository:</strong>
-            <pre><code>git clone https://github.com/tanvir771/tictactoe.git
+            <pre><code>git clone https://github.com/tanvir771/tictactoe
 cd tictactoe</code></pre>
         </li>
         <li><strong>Run the Game:</strong>
-            <pre><code>python tictactoe.py</code></pre>
+            <pre><code>python main.py</code></pre>
         </li>
     </ol>
     <p>Thank you for checking out the TicTacToe project! Have fun playing and exploring the code. If you have any questions or suggestions, feel free to reach out.</p>
