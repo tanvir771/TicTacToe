@@ -74,7 +74,16 @@ flip = True
 
 playing = True
 
+# AI makes the first move
+firstmove = True
+
+
 while running:
+  if firstmove:
+    grid.make_best_move(1)
+    winner = grid.redrawGrid(circle, cross)
+    firstmove = False
+
   event = pygame.event.get()
 
   for ev in event:
@@ -85,6 +94,10 @@ while running:
       running = False
     # handle MOUSEBUTTONUP
     if playing == True:
+      if not flip:
+        grid.make_best_move(1)
+        winner = grid.redrawGrid(circle, cross)
+        flip = True
       if ev.type == pygame.MOUSEBUTTONUP:
         pos = pygame.mouse.get_pos()
         (row, column) = get_placement(pos, width, height)
@@ -95,11 +108,7 @@ while running:
           grid.updateGrid(row-1, column-1, 0)
           winner = grid.redrawGrid(circle, cross)
           flip = False
-        else:
-          grid.updateGrid(row-1, column-1, 1)
-          #grid.make_best_move(1)
-          winner = grid.redrawGrid(circle, cross)
-          flip = True
+
 
         if winner != -1:
           text = labelWinner(winner)
@@ -107,6 +116,7 @@ while running:
           labelRect = label.get_rect(center=(width // 2, height // 2))
           screen.blit(label, labelRect)
           playing = False
+
 
         pygame.display.update()
 
