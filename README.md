@@ -17,7 +17,7 @@
             </ul>
         </li>
         <li><strong>Clone the Repository:</strong>
-            <pre><code>git clone https://github.com/your-username/tictactoe.git
+            <pre><code>git clone https://github.com/tanvir771/tictactoe.git
 cd tictactoe</code></pre>
         </li>
         <li><strong>Run the Game:</strong>
