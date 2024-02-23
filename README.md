@@ -1,6 +1,6 @@
 # TicTacToe
    <h1>TicTacToe Game with Pygame</h1>
-   ![Game-Running](Screenshots/Game_Running.png)
+    <img src="Screenshots/Game_Running.png" alt="Game Running"/>
     <h2>Overview</h2>
     <p>Welcome to the TicTacToe project! This is a graphical implementation of the classic TicTacToe game using Pygame, a popular Python library for game development. The project aims to provide an interactive and enjoyable gaming experience for players, with an added twist of AI-based gameplay.</p>
     <h2>Features</h2>
